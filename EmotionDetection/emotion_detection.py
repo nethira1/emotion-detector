@@ -9,15 +9,14 @@ import requests
 def emotion_detector(text_to_analyze):
     """
     Sends the given text to the Watson NLP EmotionPredict service and
-    returns a dictionary of emotion scores along with the dominant emotion.
+    returns a formatted string describing the emotion scores and the
+    dominant emotion.
 
     Args:
         text_to_analyze (str): The text to run emotion detection on.
 
     Returns:
-        dict: Contains 'anger', 'disgust', 'fear', 'joy', 'sadness' scores
-              and 'dominant_emotion'. All values are None if the input
-              text was blank or invalid (status code 400).
+        str: A formatted string with the emotion scores and dominant emotion.
     """
     url = ('https://sn-watson-emotion.labs.skills.network/v1/'
            'watson.runtime.nlp.v1/NlpService/EmotionPredict')
@@ -54,6 +53,11 @@ def emotion_detector(text_to_analyze):
     }
 
     dominant_emotion = max(emotion_scores, key=emotion_scores.get)
-    emotion_scores['dominant_emotion'] = dominant_emotion
 
-    return emotion_scores
+    formatted_output = (
+        f"For the given statement, the system response is 'anger': {anger}, "
+        f"'disgust': {disgust}, 'fear': {fear}, 'joy': {joy} and "
+        f"'sadness': {sadness}. The dominant emotion is {dominant_emotion}."
+    )
+
+    return formatted_output
